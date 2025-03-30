@@ -2,15 +2,15 @@
 
 #include <ctype.h>
 #include <lvgl.h>
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <zephyr/sys/util.h>
 #include "../../include/colors.h"
 #include "../../include/central/initialize_listeners.h"
-#include "../../include/fonts/custom_font_22.h"
-#include "../../include/fonts/custom_font_44.h"
-#include "../../include/fonts/custom_font_shadow.h"
-#include "../../include/fonts/custom_font_outline.h"
+#include "../../include/fonts/press_start_2p_8.h"
+#include "../../include/fonts/press_start_2p_16.h"
+#include "../../include/fonts/press_start_2p_24.h"
 #include "../../include/main.h"
 #include "../../include/utils/draw_battery.h"
 #include "../../include/utils/draw_background.h"
@@ -18,23 +18,22 @@
 #include "../../include/utils/draw_bluetooth_logo_outlined.h"
 #include "../../include/utils/draw_bluetooth_logo.h"
 #include "../../include/utils/draw_usb_logo.h"
-#include "../../include/utils/rotate_connectivity_canvas.h"
 
 void render_battery() {
     lv_canvas_fill_bg(battery_canvas, BACKGROUND_COLOR, LV_OPA_COVER);
 
-    draw_battery(battery_canvas, 7, 4, states.battery);
+    draw_battery(battery_canvas, 0, 0, states.battery);
 }
 
 static void render_bluetooth_logo() {
     if (states.connectivity.active_profile_bonded) {
         if (states.connectivity.active_profile_connected) {
-            draw_bluetooth_logo(connectivity_canvas, 18, 4);
+            draw_bluetooth_logo(connectivity_canvas, 16, 0);
         } else {
-            draw_bluetooth_logo_outlined(connectivity_canvas, 18, 4);
+            draw_bluetooth_logo_outlined(connectivity_canvas, 16, 0);
         }
     } else {
-        draw_bluetooth_searching(connectivity_canvas, 18, 4);
+        draw_bluetooth_searching(connectivity_canvas, 16, 0);
     }
 }
 
@@ -42,16 +41,22 @@ static void render_bluetooth_profile_index() {
     lv_draw_label_dsc_t label_dsc;
     lv_draw_label_dsc_init(&label_dsc);
     label_dsc.color = FOREGROUND_COLOR;
-    label_dsc.font = &custom_font_22;
+    label_dsc.font = &press_start_2p_16;
     label_dsc.align = LV_TEXT_ALIGN_RIGHT;
 
-    static const unsigned custom_font_22_height = 19;
-    static const unsigned padding_y = (CONNECTIVITY_CANVAS_AVAILABLE_HEIGHT - custom_font_22_height) / 2;
-    static const unsigned width = CONNECTIVITY_CANVAS_WIDTH - 18;
+    // Magic number
+    static const unsigned padding_x_offset = 2;
+    static const unsigned padding_x = padding_x_offset;
+
+    // Magic number
+    static const unsigned padding_y_offset = 1;
+    // `ceil` is used to tend towards the bottom of the screen.
+    const unsigned padding_y = ceil((CONNECTIVITY_CANVAS_HEIGHT - press_start_2p_16.line_height) / 2) + padding_y_offset;
+    static const unsigned width = CONNECTIVITY_CANVAS_WIDTH - 12 - 2;
     static const char bluetooth_profile_label[5][2] = {"1", "2", "3", "4", "5"};
     const char* label = bluetooth_profile_label[states.connectivity.active_profile_index];
    
-    lv_canvas_draw_text(connectivity_canvas, 0, padding_y, width, &label_dsc, label);
+    lv_canvas_draw_text(connectivity_canvas, padding_x, padding_y, width, &label_dsc, label);
 }
 
 static void render_bluetooth_connectivity() {
@@ -60,7 +65,7 @@ static void render_bluetooth_connectivity() {
 }
 
 static void render_usb_connectivity() {
-    draw_usb_logo(connectivity_canvas, 11, 8);
+    draw_usb_logo(connectivity_canvas, 10, 4);
 }
 
 void render_connectivity() {
@@ -76,17 +81,21 @@ void render_connectivity() {
             break;
         }
     }
-
-    rotate_connectivity_canvas();
 }
 
 void render_main() {
-#if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_BACKGROUND)
-    // Unfortunately, text transparency does not seem to work in LVGL 8.3. This
-    // forces us to redraw the background on every render instead of having it
-    // on a layer underneath.
-    draw_background(main_canvas, states.background_index);
-#endif
+    lv_draw_rect_dsc_t background_dsc;
+    lv_draw_rect_dsc_init(&background_dsc);
+    background_dsc.bg_color = BACKGROUND_COLOR;
+    
+    lv_canvas_draw_rect(
+        layer_canvas,
+        0,
+        0,
+        LAYER_CANVAS_WIDTH,
+        LAYER_CANVAS_HEIGHT,
+        &background_dsc
+    );
 
     // Capitalize the layer name if given or use the layer number otherwise.
     char* text = NULL;
@@ -97,67 +106,142 @@ void render_main() {
     else {
         text = malloc((strlen(states.layer.name) + 1) * sizeof(char));
         for (unsigned i = 0; states.layer.name[i] != '\0'; i++) {
+#if IS_ENABLED(NICE_VIEW_ELEMENTAL_CAPITALIZATION)
             text[i] = toupper(states.layer.name[i]);
+#else
+            text[i] = states.layer.name[i];
+#endif
         }
         text[strlen(states.layer.name)] = '\0';
     }
 
-    // Magic number. The height of the font from the baseline to the ascender
-    // height is 34px, but halving the space remaining of the full height gives
-    // us another value ((68px - 34px) / 2 = 17px). 
-    static const unsigned text_y_offset = 15;
-
-#if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_OUTLINE)
-    lv_draw_label_dsc_t outline_dsc;
-    lv_draw_label_dsc_init(&outline_dsc);
-    outline_dsc.color = FOREGROUND_COLOR;
-    outline_dsc.font = &custom_font_outline;
-    outline_dsc.align = LV_TEXT_ALIGN_CENTER;
-
-    lv_canvas_draw_text(
-        main_canvas,
-        0,
-        // Magic number offset. We would think that the fonts would line up
-        // perfectly, because of how they were created, but no.
-        text_y_offset - 1,
-        MAIN_CANVAS_WIDTH,
-        &outline_dsc,
-        text
-    );
-#endif
-
-#if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_SHADOW)
-    lv_draw_label_dsc_t shadow_dsc;
-    lv_draw_label_dsc_init(&shadow_dsc);
-    shadow_dsc.color = BACKGROUND_COLOR;
-    shadow_dsc.font = &custom_font_shadow;
-    shadow_dsc.align = LV_TEXT_ALIGN_CENTER;
-
-    lv_canvas_draw_text(
-        main_canvas,
-        0,
-        text_y_offset,
-        MAIN_CANVAS_WIDTH,
-        &shadow_dsc,
-        text
-    );
-#endif
-
     lv_draw_label_dsc_t layer_name_dsc;
     lv_draw_label_dsc_init(&layer_name_dsc);
     layer_name_dsc.color = FOREGROUND_COLOR;
-    layer_name_dsc.font = &custom_font_44;
+    layer_name_dsc.font = &press_start_2p_24;
     layer_name_dsc.align = LV_TEXT_ALIGN_CENTER;
 
     lv_canvas_draw_text(
-        main_canvas,
+        layer_canvas,
         0,
-        text_y_offset,
-        MAIN_CANVAS_WIDTH,
+        0,
+        LAYER_CANVAS_WIDTH,
         &layer_name_dsc,
         text
     );
 
     free(text);
     text = NULL;
+}
+
+void render_modifiers() {
+    lv_draw_rect_dsc_t background_dsc;
+    lv_draw_rect_dsc_init(&background_dsc);
+    background_dsc.bg_color = BACKGROUND_COLOR;
+    
+    lv_canvas_draw_rect(
+        modifiers_canvas,
+        0,
+        0,
+        MODIFIERS_CANVAS_WIDTH,
+        MODIFIERS_CANVAS_HEIGHT,
+        &background_dsc
+    );
+
+    lv_draw_rect_dsc_t active_modifier_background_dsc;
+    lv_draw_rect_dsc_init(&active_modifier_background_dsc);
+    active_modifier_background_dsc.bg_color = FOREGROUND_COLOR;
+
+    lv_draw_label_dsc_t active_modifier_text_dsc;
+    lv_draw_label_dsc_init(&active_modifier_text_dsc);
+    active_modifier_text_dsc.color = BACKGROUND_COLOR;
+    active_modifier_text_dsc.font = &press_start_2p_8;
+    active_modifier_text_dsc.align = LV_TEXT_ALIGN_LEFT;
+
+    lv_draw_label_dsc_t inactive_modifier_text_dsc;
+    lv_draw_label_dsc_init(&inactive_modifier_text_dsc);
+    inactive_modifier_text_dsc.color = FOREGROUND_COLOR;
+    inactive_modifier_text_dsc.font = &press_start_2p_8;
+    inactive_modifier_text_dsc.align = LV_TEXT_ALIGN_LEFT;
+
+    if (states.modifiers.is_gui_active) {
+        lv_canvas_draw_rect(
+            modifiers_canvas,
+            // 0 * (MODIFIER_WIDTH + MODIFIER_PADDING_X),
+            0,
+            0,
+            MODIFIER_WIDTH,
+            MODIFIERS_CANVAS_HEIGHT,
+            &active_modifier_background_dsc
+        );
+    }
+
+    lv_canvas_draw_text(
+        modifiers_canvas,
+        MODIFIER_PADDING_X,
+        MODIFIER_PADDING_Y,
+        MODIFIER_WIDTH,
+        states.modifiers.is_gui_active ? &active_modifier_text_dsc : &inactive_modifier_text_dsc,
+        "W"
+    );
+
+    if (states.modifiers.is_alt_active) {
+        lv_canvas_draw_rect(
+            modifiers_canvas,
+            1 * (MODIFIER_WIDTH + MODIFIERS_GAP),
+            0,
+            MODIFIER_WIDTH,
+            MODIFIERS_CANVAS_HEIGHT,
+            &active_modifier_background_dsc
+        );
+    }
+
+    lv_canvas_draw_text(
+        modifiers_canvas,
+        1 * (MODIFIER_WIDTH + MODIFIERS_GAP) + MODIFIER_PADDING_X,
+        MODIFIER_PADDING_Y,
+        MODIFIER_WIDTH,
+        states.modifiers.is_alt_active ? &active_modifier_text_dsc : &inactive_modifier_text_dsc,
+        "A"
+    );
+
+    if (states.modifiers.is_ctrl_active) {
+        lv_canvas_draw_rect(
+            modifiers_canvas,
+            2 * (MODIFIER_WIDTH + MODIFIERS_GAP),
+            0,
+            MODIFIER_WIDTH,
+            MODIFIERS_CANVAS_HEIGHT,
+            &active_modifier_background_dsc
+        );
+    }
+
+    lv_canvas_draw_text(
+        modifiers_canvas,
+        2 * (MODIFIER_WIDTH + MODIFIERS_GAP) + MODIFIER_PADDING_X,
+        MODIFIER_PADDING_Y,
+        MODIFIER_WIDTH,
+        states.modifiers.is_ctrl_active ? &active_modifier_text_dsc : &inactive_modifier_text_dsc,
+        "C"
+    );
+
+    if (states.modifiers.is_shift_active) {
+        lv_canvas_draw_rect(
+            modifiers_canvas,
+            3 * (MODIFIER_WIDTH + MODIFIERS_GAP),
+            0,
+            MODIFIER_WIDTH,
+            MODIFIERS_CANVAS_HEIGHT,
+            &active_modifier_background_dsc
+        );
+    }
+
+    lv_canvas_draw_text(
+        modifiers_canvas,
+        3 * (MODIFIER_WIDTH + MODIFIERS_GAP) + MODIFIER_PADDING_X,
+        MODIFIER_PADDING_Y,
+        MODIFIER_WIDTH,
+        states.modifiers.is_shift_active ? &active_modifier_text_dsc : &inactive_modifier_text_dsc,
+        "S"
+    );
 }

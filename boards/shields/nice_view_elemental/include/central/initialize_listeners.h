@@ -19,11 +19,19 @@ struct layer_state {
     const char* name;
 };
 
+struct modifiers_state {
+    bool is_shift_active;
+    bool is_ctrl_active;
+    bool is_alt_active;
+    bool is_gui_active;
+};
+
 struct states {
     unsigned background_index;
     struct battery_state battery;
     struct connectivity_state connectivity;
     struct layer_state layer;
+    struct modifiers_state modifiers;
 };
 
 extern struct states states;

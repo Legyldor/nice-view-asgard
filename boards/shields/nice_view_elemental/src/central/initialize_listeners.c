@@ -13,6 +13,7 @@
 #include <zmk/events/battery_state_changed.h>
 #include <zmk/events/ble_active_profile_changed.h>
 #include <zmk/events/endpoint_changed.h>
+#include <zmk/events/keycode_state_changed.h>
 #include <zmk/events/layer_state_changed.h>
 #include <zmk/events/usb_conn_state_changed.h>
 #include <zmk/keymap.h>
@@ -214,10 +215,53 @@ ZMK_SUBSCRIPTION(
     zmk_layer_state_changed
 );
 
+
+static void modifiers_state_update_callback(struct modifiers_state state) {
+    states.modifiers = state;
+
+    render_modifiers();
+}
+
+// Retrieve the data we want from the event
+static struct modifiers_state get_modifiers_state(const zmk_event_t* event) {
+    const zmk_mod_flags_t modifiers = zmk_hid_get_explicit_mods();
+    const bool is_shift_active = modifiers & (MOD_LSFT | MOD_RSFT);
+    const bool is_ctrl_active = modifiers & (MOD_LCTL | MOD_RCTL);
+    const bool is_alt_active = modifiers & (MOD_LALT | MOD_RALT);
+    const bool is_gui_active = modifiers & (MOD_LGUI | MOD_RGUI);
+
+    struct modifiers_state state = {
+        .is_shift_active = is_shift_active,
+        .is_ctrl_active = is_ctrl_active,
+        .is_alt_active = is_alt_active,
+        .is_gui_active = is_gui_active,
+    };
+
+    return state;
+}
+
+// Create a listener named `widget_modifiers_state_update`. This name is then used
+// to create a subscription.
+ZMK_DISPLAY_WIDGET_LISTENER(
+    widget_modifiers_state_update,
+    struct modifiers_state,
+    // Called after `get_modifiers_state` with the value it returned.
+    modifiers_state_update_callback,
+    get_modifiers_state
+)
+
+// Subscribe the `widget_modifiers_state_update` listener to the
+// `zmk_keycode_state_changed` event dispatched by ZMK.
+ZMK_SUBSCRIPTION(
+    widget_modifiers_state_update,
+    zmk_keycode_state_changed
+);
+
 void initialize_listeners() {
     widget_layer_state_update_init();
     widget_connectivity_state_update_init();
     widget_battery_state_update_init();
+    widget_modifiers_state_update_init();
 
 #if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION)
     start_timer();

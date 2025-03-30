@@ -9,28 +9,65 @@
 #include "../../include/utils/draw_background.h"
 #include "../../include/utils/draw_bluetooth_logo_outlined.h"
 #include "../../include/utils/draw_bluetooth_logo.h"
-#include "../../include/utils/rotate_connectivity_canvas.h"
+
+void rotate_battery_canvas() {
+    static lv_color_t tmp_buffer[LV_CANVAS_BUF_SIZE_TRUE_COLOR(BATTERY_CANVAS_WIDTH, BATTERY_CANVAS_HEIGHT)];
+    memcpy(tmp_buffer, battery_canvas_buffer, sizeof(tmp_buffer));
+
+    lv_img_dsc_t tmp_canvas;
+    tmp_canvas.data = (void*)tmp_buffer;
+    tmp_canvas.header.cf = LV_IMG_CF_TRUE_COLOR;
+    tmp_canvas.header.w = BATTERY_CANVAS_WIDTH;
+    tmp_canvas.header.h = BATTERY_CANVAS_HEIGHT;
+
+    lv_canvas_fill_bg(battery_canvas, BACKGROUND_COLOR, LV_OPA_COVER);
+    lv_canvas_transform(
+        battery_canvas,
+        &tmp_canvas,
+        1800, LV_IMG_ZOOM_NONE,
+        -1, 0,
+        BATTERY_CANVAS_WIDTH / 2, BATTERY_CANVAS_HEIGHT / 2,
+        false
+    );
+}
 
 void render_battery() {
     lv_canvas_fill_bg(battery_canvas, BACKGROUND_COLOR, LV_OPA_COVER);
 
-    draw_battery(battery_canvas, 7, 4, states.battery);
+    draw_battery(battery_canvas, 0, 0, states.battery);
+
+    rotate_battery_canvas();
+}
+
+void rotate_connectivity_canvas() {
+    static lv_color_t tmp_buffer[LV_CANVAS_BUF_SIZE_TRUE_COLOR(CONNECTIVITY_CANVAS_WIDTH, CONNECTIVITY_CANVAS_HEIGHT)];
+    memcpy(tmp_buffer, connectivity_canvas_buffer, sizeof(tmp_buffer));
+
+    lv_img_dsc_t tmp_canvas;
+    tmp_canvas.data = (void*)tmp_buffer;
+    tmp_canvas.header.cf = LV_IMG_CF_TRUE_COLOR;
+    tmp_canvas.header.w = CONNECTIVITY_CANVAS_WIDTH;
+    tmp_canvas.header.h = CONNECTIVITY_CANVAS_HEIGHT;
+
+    lv_canvas_fill_bg(connectivity_canvas, BACKGROUND_COLOR, LV_OPA_COVER);
+    lv_canvas_transform(
+        connectivity_canvas,
+        &tmp_canvas,
+        1800, LV_IMG_ZOOM_NONE,
+        -1, 0,
+        CONNECTIVITY_CANVAS_WIDTH / 2, CONNECTIVITY_CANVAS_HEIGHT / 2,
+        false
+    );
 }
 
 void render_connectivity() {
     lv_canvas_fill_bg(connectivity_canvas, BACKGROUND_COLOR, LV_OPA_COVER);
 
     if (states.connectivity.connected) {
-        draw_bluetooth_logo(connectivity_canvas, 18, 4);
+        draw_bluetooth_logo(connectivity_canvas, 16, 0);
     } else {
-        draw_bluetooth_logo_outlined(connectivity_canvas, 18, 4);
+        draw_bluetooth_logo_outlined(connectivity_canvas, 16, 0);
     }
 
     rotate_connectivity_canvas();
-}
-
-void render_main() {
-#if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_BACKGROUND)
-    draw_background(main_canvas, states.background_index);
-#endif
 }

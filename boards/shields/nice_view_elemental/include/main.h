@@ -7,17 +7,29 @@
 #define SCREEN_WIDTH 160
 #define SCREEN_HEIGHT 68
 
-#define TOP_WIDTH 25
+#define PADDING 2
 
-#define BATTERY_CANVAS_WIDTH (TOP_WIDTH)
-#define BATTERY_CANVAS_HEIGHT (SCREEN_HEIGHT / 2)
+#define STATUS_HEIGHT 21
 
-#define CONNECTIVITY_CANVAS_WIDTH (SCREEN_HEIGHT / 2)
-#define CONNECTIVITY_CANVAS_HEIGHT (CONNECTIVITY_CANVAS_WIDTH)
-#define CONNECTIVITY_CANVAS_AVAILABLE_HEIGHT (TOP_WIDTH)
+#define BATTERY_CANVAS_WIDTH 24
+#define BATTERY_CANVAS_HEIGHT 11
 
-#define MAIN_CANVAS_WIDTH (SCREEN_WIDTH - TOP_WIDTH)
-#define MAIN_CANVAS_HEIGHT (SCREEN_HEIGHT)
+#define CONNECTIVITY_CANVAS_WIDTH 28
+#define CONNECTIVITY_CANVAS_HEIGHT 17
+
+#define MODIFIERS_GAP 3
+#define MODIFIERS_COUNT 4
+#define MODIFIER_FONT_WIDTH 7
+#define MODIFIER_PADDING_X 1
+#define MODIFIER_WIDTH (MODIFIER_FONT_WIDTH + 2 * MODIFIER_PADDING_X)
+#define MODIFIERS_CANVAS_WIDTH (MODIFIERS_COUNT * MODIFIER_WIDTH + (MODIFIERS_COUNT - 1) * MODIFIERS_GAP)
+#define MODIFIER_PADDING_Y 3
+#define MODIFIERS_CANVAS_HEIGHT 13
+
+#define LAYER_CANVAS_WIDTH (SCREEN_WIDTH - 2 * PADDING)
+// This seemingly magic number comes from the font line height used, but the
+// variable cannot be used since it is not a static constant.
+#define LAYER_CANVAS_HEIGHT 24
 
 extern lv_obj_t* battery_canvas;
 extern lv_color_t battery_canvas_buffer[];
@@ -25,5 +37,8 @@ extern lv_color_t battery_canvas_buffer[];
 extern lv_obj_t* connectivity_canvas;
 extern lv_color_t connectivity_canvas_buffer[];
 
-extern lv_obj_t* main_canvas;
-extern lv_color_t main_canvas_buffer[];
+extern lv_obj_t* layer_canvas;
+extern lv_color_t layer_canvas_buffer[];
+
+extern lv_obj_t* modifiers_canvas;
+extern lv_color_t modifiers_canvas_buffer[];

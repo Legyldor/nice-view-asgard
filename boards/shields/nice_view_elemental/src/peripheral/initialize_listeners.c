@@ -154,12 +154,4 @@ ZMK_SUBSCRIPTION(
 void initialize_listeners() {
     widget_connectivity_state_update_init();
     widget_battery_state_update_init();
-
-    // We are calling this one during the initialization since no state is bound
-    // to it.
-    render_main();
-
-#if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION)
-    start_timer();
-#endif
 }
