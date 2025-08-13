@@ -17,6 +17,9 @@
 #define CONNECTIVITY_CANVAS_WIDTH 28
 #define CONNECTIVITY_CANVAS_HEIGHT 17
 
+#define IMAGE_CANVAS_WIDTH 96
+#define IMAGE_CANVAS_HEIGHT 54
+
 #define MODIFIERS_GAP 3
 #define MODIFIERS_COUNT 4
 #define MODIFIER_FONT_WIDTH 7
@@ -42,3 +45,8 @@ extern lv_color_t layer_canvas_buffer[];
 
 extern lv_obj_t* modifiers_canvas;
 extern lv_color_t modifiers_canvas_buffer[];
+
+#if (defined(CONFIG_ZMK_SPLIT) && !defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
+extern lv_obj_t* image_canvas;
+extern lv_color_t image_canvas_buffer[];
+#endif

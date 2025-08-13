@@ -3,18 +3,10 @@ if(CONFIG_ZMK_DISPLAY AND CONFIG_NICE_VIEW_WIDGET_STATUS)
 
   zephyr_library_sources(
     ./src/main.c
-    ./src/images/background_0.c
-    ./src/images/background_1.c
-    ./src/images/background_2.c
-    ./src/images/background_3.c
-    ./src/images/background_4.c
-    ./src/images/background_5.c
-    ./src/images/background_6.c
     ./src/images/bluetooth_logo_outlined.c
     ./src/images/bluetooth_logo.c
     ./src/images/bluetooth_searching.c
     ./src/images/usb_logo.c
-    ./src/utils/draw_background.c
     ./src/utils/draw_battery.c
     ./src/utils/draw_bluetooth_logo_outlined.c
     ./src/utils/draw_bluetooth_logo.c
@@ -34,8 +26,19 @@ if(CONFIG_ZMK_DISPLAY AND CONFIG_NICE_VIEW_WIDGET_STATUS)
     )
   else()
     zephyr_library_sources(
+#      ./src/images/fire_0.c
+#      ./src/images/fire_1.c
+#      ./src/images/fire_2.c
+#      ./src/images/fire_3.c
+#      ./src/images/fire_4.c
+#      ./src/images/fire_5.c
+#      ./src/images/fire_6.c
+#      ./src/images/fire_7.c
+#      ./src/images/fire_8.c
+#      ./src/images/fire_9.c
       ./src/peripheral/initialize_listeners.c
       ./src/peripheral/render.c
+      ./src/utils/draw_fire.c
     )
   endif()
 endif()

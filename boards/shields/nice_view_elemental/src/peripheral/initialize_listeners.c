@@ -16,19 +16,19 @@
 struct states states;
 
 #if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION)
-void background_update_timer(lv_timer_t* timer)
-{
-    states.background_index = (states.background_index + 1) % UINT_MAX;
+// void image_update_timer(lv_timer_t* timer)
+// {
+//     states.image_index = (states.image_index + 1) % UINT_MAX;
 
-    render_main();
-}
+//     render_image();
+// }
 
-lv_timer_t * timer;
+// lv_timer_t * timer;
 
-static void start_timer() {
-    // Call the `background_update_timer` function every configured interval.
-    timer = lv_timer_create(background_update_timer, CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION_FRAME_MS, NULL);
-}
+// static void start_timer() {
+//     // Call the `image_update_timer` function every configured interval.
+//     timer = lv_timer_create(image_update_timer, CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION_FRAME_MS, NULL);
+// }
 
 // We want to pause the animation when the keyboard is idling.
 int activity_update_callback(const zmk_event_t* eh) {
@@ -39,12 +39,14 @@ int activity_update_callback(const zmk_event_t* eh) {
 
     switch (ev->state) {
         case ZMK_ACTIVITY_ACTIVE: {
-            lv_timer_resume(timer);
+            start_animation();
+            // lv_timer_resume(timer);
             break;
         }
         case ZMK_ACTIVITY_IDLE:
         case ZMK_ACTIVITY_SLEEP: {
-            lv_timer_pause(timer);
+            stop_animation();
+            // lv_timer_pause(timer);
             break;
         }
         default: {
@@ -154,4 +156,9 @@ ZMK_SUBSCRIPTION(
 void initialize_listeners() {
     widget_connectivity_state_update_init();
     widget_battery_state_update_init();
+
+    // We are calling this one during the initialization since no state is bound
+    // to it.
+    initialize_animation();
+    start_animation();
 }

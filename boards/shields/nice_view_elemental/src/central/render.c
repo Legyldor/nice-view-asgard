@@ -13,7 +13,6 @@
 #include "../../include/fonts/press_start_2p_24.h"
 #include "../../include/main.h"
 #include "../../include/utils/draw_battery.h"
-#include "../../include/utils/draw_background.h"
 #include "../../include/utils/draw_bluetooth_searching.h"
 #include "../../include/utils/draw_bluetooth_logo_outlined.h"
 #include "../../include/utils/draw_bluetooth_logo.h"

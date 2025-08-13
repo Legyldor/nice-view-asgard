@@ -10,7 +10,7 @@ struct connectivity_state {
 };
 
 struct states {
-    unsigned background_index;
+    unsigned image_index;
     struct battery_state battery;
     struct connectivity_state connectivity;
 };

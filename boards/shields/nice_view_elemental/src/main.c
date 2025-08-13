@@ -38,6 +38,16 @@ lv_color_t modifiers_canvas_buffer[
     )
 ];
 
+#if (defined(CONFIG_ZMK_SPLIT) && !defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
+lv_obj_t* image_canvas;
+lv_color_t image_canvas_buffer[
+    LV_CANVAS_BUF_SIZE_TRUE_COLOR(
+        IMAGE_CANVAS_WIDTH,
+        IMAGE_CANVAS_HEIGHT
+    )
+];
+#endif
+
 // ZMK calls this function directly in `app/src/display/main.c` of its source
 // code.
 lv_obj_t* zmk_display_status_screen() {
@@ -45,7 +55,7 @@ lv_obj_t* zmk_display_status_screen() {
     lv_obj_t* screen = lv_obj_create(NULL);
     lv_obj_set_size(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-#if defined(CONFIG_ZMK_SPLIT) && defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
+#if (defined(CONFIG_ZMK_SPLIT) && defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
     // Create the main canvas to be used in the `render_main` function.
     layer_canvas = lv_canvas_create(screen);
     lv_obj_align(
@@ -83,7 +93,7 @@ lv_obj_t* zmk_display_status_screen() {
     battery_canvas = lv_canvas_create(screen);
     lv_obj_align(
         battery_canvas,
-#if defined(CONFIG_ZMK_SPLIT) && (!defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
+#if (defined(CONFIG_ZMK_SPLIT) && !defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
         LV_ALIGN_TOP_RIGHT,
         -PADDING,
         PADDING + 3
@@ -105,7 +115,7 @@ lv_obj_t* zmk_display_status_screen() {
     connectivity_canvas = lv_canvas_create(screen);
     lv_obj_align(
         connectivity_canvas,
-#if defined(CONFIG_ZMK_SPLIT) && (!defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
+#if (defined(CONFIG_ZMK_SPLIT) && !defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
         LV_ALIGN_TOP_LEFT,
         PADDING,
         PADDING
@@ -122,7 +132,26 @@ lv_obj_t* zmk_display_status_screen() {
         CONNECTIVITY_CANVAS_HEIGHT,
         LV_IMG_CF_TRUE_COLOR
     );
-
+    
+#if (defined(CONFIG_ZMK_SPLIT) && !defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
+    // Create the info canvas to be used in the `render_image` function.
+    image_canvas = lv_animimg_create(screen);
+    // image_canvas = lv_canvas_create(screen);
+    lv_obj_align(
+        image_canvas,
+        LV_ALIGN_CENTER,
+        0,
+        0
+    );
+    // lv_canvas_set_buffer(
+    //     image_canvas,
+    //     image_canvas_buffer,
+    //     IMAGE_CANVAS_WIDTH,
+    //     IMAGE_CANVAS_HEIGHT,
+    //     LV_IMG_CF_TRUE_COLOR
+    // );
+#endif
+    
     // Depending on which half the build is for, the implementation will differ.
     initialize_listeners();
 

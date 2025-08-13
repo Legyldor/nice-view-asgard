@@ -6,9 +6,23 @@
 #include "../../include/main.h"
 #include "../../include/peripheral/initialize_listeners.h"
 #include "../../include/utils/draw_battery.h"
-#include "../../include/utils/draw_background.h"
+// #include "../../include/utils/draw_fire.h"
 #include "../../include/utils/draw_bluetooth_logo_outlined.h"
 #include "../../include/utils/draw_bluetooth_logo.h"
+
+
+#include <stdlib.h>
+#include <zephyr/kernel.h>
+// #include "../../include/images/fire_0.h"
+// #include "../../include/images/fire_1.h"
+// #include "../../include/images/fire_2.h"
+// #include "../../include/images/fire_3.h"
+// #include "../../include/images/fire_4.h"
+// #include "../../include/images/fire_5.h"
+// #include "../../include/images/fire_6.h"
+// #include "../../include/images/fire_7.h"
+// #include "../../include/images/fire_8.h"
+// #include "../../include/images/fire_9.h"
 
 void rotate_battery_canvas() {
     static lv_color_t tmp_buffer[LV_CANVAS_BUF_SIZE_TRUE_COLOR(BATTERY_CANVAS_WIDTH, BATTERY_CANVAS_HEIGHT)];
@@ -70,4 +84,49 @@ void render_connectivity() {
     }
 
     rotate_connectivity_canvas();
+}
+
+const lv_img_dsc_t* images[] = {
+    // &fire_0,
+    // &fire_1,
+    // &fire_2,
+    // &fire_3,
+    // &fire_4,
+    // &fire_5,
+    // &fire_6,
+    // &fire_7,
+    // &fire_8,
+    // &fire_9,
+};
+
+// static const unsigned int frame_count = 10;
+static const unsigned int frame_count = 0;
+
+// void render_image() {
+//     // lv_obj_t* art = lv_animimg_create(image_canvas);
+//     // lv_obj_center(art);
+
+//     lv_animimg_set_src(image_canvas, (const void**)images, frame_count);
+//     lv_animimg_set_duration(image_canvas, 1000);
+//     lv_animimg_set_repeat_count(image_canvas, LV_ANIM_REPEAT_INFINITE);
+//     lv_animimg_start(image_canvas);
+    
+//     // lv_obj_align(image_canvas, LV_ALIGN_TOP_LEFT, 0, 0);
+
+//     // draw_fire(image_canvas, states.image_index);
+// }
+
+void initialize_animation() {
+    lv_animimg_set_src(image_canvas, (const void**)images, frame_count);
+    lv_animimg_set_duration(image_canvas, 1000);
+}
+
+void start_animation() {
+    lv_animimg_set_repeat_count(image_canvas, LV_ANIM_REPEAT_INFINITE);
+    lv_animimg_start(image_canvas);
+}
+
+void stop_animation() {
+    lv_animimg_set_repeat_count(image_canvas, 1);
+    lv_animimg_start(image_canvas);
 }
