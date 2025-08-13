@@ -26,19 +26,9 @@ if(CONFIG_ZMK_DISPLAY AND CONFIG_NICE_VIEW_WIDGET_STATUS)
     )
   else()
     zephyr_library_sources(
-#      ./src/images/fire_0.c
-#      ./src/images/fire_1.c
-#      ./src/images/fire_2.c
-#      ./src/images/fire_3.c
-#      ./src/images/fire_4.c
-#      ./src/images/fire_5.c
-#      ./src/images/fire_6.c
-#      ./src/images/fire_7.c
-#      ./src/images/fire_8.c
-#      ./src/images/fire_9.c
       ./src/peripheral/initialize_listeners.c
+      ./src/images/noise.c
       ./src/peripheral/render.c
-      ./src/utils/draw_fire.c
     )
   endif()
 endif()

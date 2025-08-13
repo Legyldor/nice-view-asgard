@@ -16,20 +16,6 @@
 struct states states;
 
 #if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION)
-// void image_update_timer(lv_timer_t* timer)
-// {
-//     states.image_index = (states.image_index + 1) % UINT_MAX;
-
-//     render_image();
-// }
-
-// lv_timer_t * timer;
-
-// static void start_timer() {
-//     // Call the `image_update_timer` function every configured interval.
-//     timer = lv_timer_create(image_update_timer, CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION_FRAME_MS, NULL);
-// }
-
 // We want to pause the animation when the keyboard is idling.
 int activity_update_callback(const zmk_event_t* eh) {
     struct zmk_activity_state_changed* ev = as_zmk_activity_state_changed(eh);

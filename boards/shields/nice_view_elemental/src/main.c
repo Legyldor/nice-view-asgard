@@ -136,20 +136,12 @@ lv_obj_t* zmk_display_status_screen() {
 #if (defined(CONFIG_ZMK_SPLIT) && !defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
     // Create the info canvas to be used in the `render_image` function.
     image_canvas = lv_animimg_create(screen);
-    // image_canvas = lv_canvas_create(screen);
     lv_obj_align(
         image_canvas,
         LV_ALIGN_CENTER,
         0,
         0
     );
-    // lv_canvas_set_buffer(
-    //     image_canvas,
-    //     image_canvas_buffer,
-    //     IMAGE_CANVAS_WIDTH,
-    //     IMAGE_CANVAS_HEIGHT,
-    //     LV_IMG_CF_TRUE_COLOR
-    // );
 #endif
     
     // Depending on which half the build is for, the implementation will differ.
