@@ -10,7 +10,7 @@
 #define LV_ATTRIBUTE_IMG_0001
 #endif
 
-const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_0001 uint8_t 0001_map[] = {
+const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_0001 uint8_t logo_0_map[] = {
   0x05, 0x04, 0x01, 0x00, 	/*Color of index 0*/
   0x94, 0x81, 0x33, 0x75, 	/*Color of index 1*/
 
@@ -87,5 +87,5 @@ const lv_img_dsc_t 0001 = {
   .header.w = 64,
   .header.h = 64,
   .data_size = 520,
-  .data = 0001_map,
+  .data = logo_0_map,
 };
