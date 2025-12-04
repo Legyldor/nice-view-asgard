@@ -1,4 +1,4 @@
-if SHIELD_NICE_VIEW_ELEMENTAL
+if SHIELD_NICE_VIEW_ASGARD
     config LV_Z_VDB_SIZE
         default 100
 
@@ -32,27 +32,27 @@ if SHIELD_NICE_VIEW_ELEMENTAL
         select LV_USE_IMG
         select LV_USE_CANVAS
 
-    config NICE_VIEW_ELEMENTAL_ANIMATION
+    config NICE_VIEW_ASGARD_ANIMATION
         bool "Enables the background animation."
         default y
 
-    config NICE_VIEW_ELEMENTAL_ANIMATION_FRAME_MS
+    config NICE_VIEW_ASGARD_ANIMATION_FRAME_MS
         int "Frame delay for the animation, in milliseconds."
         default 250
 
-    config NICE_VIEW_ELEMENTAL_CAPITALIZATION
+    config NICE_VIEW_ASGARD_CAPITALIZATION
         bool "Enables full capitalization for the layer name."
         default y
 
-    config NICE_VIEW_ELEMENTAL_BACKGROUND
+    config NICE_VIEW_ASGARD_BACKGROUND
         bool "Displays a background."
         default y
 
-    config NICE_VIEW_ELEMENTAL_OUTLINE
+    config NICE_VIEW_ASGARD_OUTLINE
         bool "Displays an outline around the shadow of the layer name."
         default y
 
-    config NICE_VIEW_ELEMENTAL_SHADOW
+    config NICE_VIEW_ASGARD_SHADOW
         bool "Displays a shadow around the layer name."
         default y
 endif

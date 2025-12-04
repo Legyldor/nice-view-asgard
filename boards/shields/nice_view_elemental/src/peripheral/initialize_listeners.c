@@ -15,7 +15,7 @@
 
 struct states states;
 
-#if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION)
+#if IS_ENABLED(CONFIG_NICE_VIEW_ASGARD_ANIMATION)
 void background_update_timer(lv_timer_t* timer)
 {
     states.background_index = (states.background_index + 1) % UINT_MAX;
@@ -27,7 +27,7 @@ lv_timer_t * timer;
 
 static void start_timer() {
     // Call the `background_update_timer` function every configured interval.
-    timer = lv_timer_create(background_update_timer, CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION_FRAME_MS, NULL);
+    timer = lv_timer_create(background_update_timer, CONFIG_NICE_VIEW_ASGARD_ANIMATION_FRAME_MS, NULL);
 }
 
 // We want to pause the animation when the keyboard is idling.
@@ -159,7 +159,7 @@ void initialize_listeners() {
     // to it.
     render_main();
 
-#if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION)
+#if IS_ENABLED(CONFIG_NICE_VIEW_ASGARD_ANIMATION)
     start_timer();
 #endif
 }

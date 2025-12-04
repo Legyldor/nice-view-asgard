@@ -1,0 +1,8 @@
+file_format: "1"
+id: nice_view_asgard
+name: nice!view Asgard
+type: shield
+url: https://github.com/Legyldor/nice-view-asgard
+requires: [nice_view_header]
+features:
+  - display

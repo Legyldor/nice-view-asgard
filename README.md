@@ -97,13 +97,13 @@ Displays the connectivity status for both the central and peripheral halves.
 
 | Config                                          | Type | Description                                                                                                       | Default |
 | ----------------------------------------------- | ---- | ----------------------------------------------------------------------------------------------------------------- | ------- |
-| `CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION`          | bool | Enables the background animation.                                                                                 | y       |
-| `CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION_FRAME_MS` | int  | Frame delay for the animation, in milliseconds.                                                                   | 250     |
-| `CONFIG_NICE_VIEW_ELEMENTAL_BACKGROUND`         | bool | Displays a background.                                                                                            | y       |
-| `CONFIG_NICE_VIEW_ELEMENTAL_OUTLINE`            | bool | Displays an outline around the shadow of the layer name. The outline is the 1px white line around the layer name. | y       |
-| `CONFIG_NICE_VIEW_ELEMENTAL_SHADOW`             | bool | Displays a shadow around the layer name. The shadow is the 4px black line around the layer name.                  | y       |
+| `CONFIG_NICE_VIEW_ASGARD_ANIMATION`          | bool | Enables the background animation.                                                                                 | y       |
+| `CONFIG_NICE_VIEW_ASGARD_ANIMATION_FRAME_MS` | int  | Frame delay for the animation, in milliseconds.                                                                   | 250     |
+| `CONFIG_NICE_VIEW_ASGARD_BACKGROUND`         | bool | Displays a background.                                                                                            | y       |
+| `CONFIG_NICE_VIEW_ASGARD_OUTLINE`            | bool | Displays an outline around the shadow of the layer name. The outline is the 1px white line around the layer name. | y       |
+| `CONFIG_NICE_VIEW_ASGARD_SHADOW`             | bool | Displays a shadow around the layer name. The shadow is the 4px black line around the layer name.                  | y       |
 <!--
-| `CONFIG_NICE_VIEW_ELEMENTAL_CAPITALIZATION`     | bool | Enables full capitalization for the layer name.                                                                   | y       | 
+| `CONFIG_NICE_VIEW_ASGARD_CAPITALIZATION`     | bool | Enables full capitalization for the layer name.                                                                   | y       | 
 -->
 
 ## How It Works

@@ -81,7 +81,7 @@ void render_connectivity() {
 }
 
 void render_main() {
-#if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_BACKGROUND)
+#if IS_ENABLED(CONFIG_NICE_VIEW_ASGARD_BACKGROUND)
     // Unfortunately, text transparency does not seem to work in LVGL 8.3. This
     // forces us to redraw the background on every render instead of having it
     // on a layer underneath.
@@ -107,7 +107,7 @@ void render_main() {
     // us another value ((68px - 34px) / 2 = 17px). 
     static const unsigned text_y_offset = 15;
 
-#if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_OUTLINE)
+#if IS_ENABLED(CONFIG_NICE_VIEW_ASGARD_OUTLINE)
     lv_draw_label_dsc_t outline_dsc;
     lv_draw_label_dsc_init(&outline_dsc);
     outline_dsc.color = FOREGROUND_COLOR;
@@ -126,7 +126,7 @@ void render_main() {
     );
 #endif
 
-#if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_SHADOW)
+#if IS_ENABLED(CONFIG_NICE_VIEW_ASGARD_SHADOW)
     lv_draw_label_dsc_t shadow_dsc;
     lv_draw_label_dsc_init(&shadow_dsc);
     shadow_dsc.color = BACKGROUND_COLOR;

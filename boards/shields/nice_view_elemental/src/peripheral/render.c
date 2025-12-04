@@ -30,7 +30,7 @@ void render_connectivity() {
 }
 
 void render_main() {
-#if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_BACKGROUND)
+#if IS_ENABLED(CONFIG_NICE_VIEW_ASGARD_BACKGROUND)
     draw_background(main_canvas, states.background_index);
 #endif
 }
