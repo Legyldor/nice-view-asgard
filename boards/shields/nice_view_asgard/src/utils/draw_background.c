@@ -31,56 +31,32 @@ void draw_background(lv_obj_t* canvas, unsigned index) {
     lv_draw_img_dsc_t img_dsc;
     lv_draw_img_dsc_init(&img_dsc);
 
-    switch ((index * 2) % 25) {
+    switch (index % 7) {
         case 0: {
             lv_canvas_draw_img(canvas, 0, 0, &logo_0, &img_dsc);
             break;
         }
-        case 2: {
-            lv_canvas_draw_img(canvas, 0, 0, &logo_2, &img_dsc);
-            break;
-        }
-        case 4: {
+        case 1: {
             lv_canvas_draw_img(canvas, 0, 0, &logo_4, &img_dsc);
             break;
         }
-        case 6: {
-            lv_canvas_draw_img(canvas, 0, 0, &logo_6, &img_dsc);
-            break;
-        }
-        case 8: {
+        case 2: {
             lv_canvas_draw_img(canvas, 0, 0, &logo_8, &img_dsc);
             break;
         }
-        case 10: {
-            lv_canvas_draw_img(canvas, 0, 0, &logo_10, &img_dsc);
-            break;
-        }
-        case 12: {
+        case 3: {
             lv_canvas_draw_img(canvas, 0, 0, &logo_12, &img_dsc);
             break;
         }
-        case 14: {
-            lv_canvas_draw_img(canvas, 0, 0, &logo_14, &img_dsc);
-            break;
-        }
-        case 16: {
+        case 4: {
             lv_canvas_draw_img(canvas, 0, 0, &logo_16, &img_dsc);
             break;
         }
-        case 18: {
-            lv_canvas_draw_img(canvas, 0, 0, &logo_18, &img_dsc);
-            break;
-        }
-        case 20: {
+        case 5: {
             lv_canvas_draw_img(canvas, 0, 0, &logo_20, &img_dsc);
             break;
         }
-        case 22: {
-            lv_canvas_draw_img(canvas, 0, 0, &logo_22, &img_dsc);
-            break;
-        }
-        case 24: {
+        case 6: {
             lv_canvas_draw_img(canvas, 0, 0, &logo_24, &img_dsc);
             break;
         }
